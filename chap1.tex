@@ -58,7 +58,7 @@
 		Using the values $ N = 4 $, $ t = 1 $ and $ U = 4 $, we obtain the density of states shown in figure \ref{fig:4_4_0_4}.
 		\begin{figure}[h!]
 			\centering
-			\includegraphics[width=1\linewidth]{image/4_4_0_4}
+			\includegraphics[width=1\linewidth]{4_4_0_4.pdf}
 			\caption{DoS for the 4 site 4 particle half-illed Hubbard model, obtained by direct inversion.}
 			\label{fig:4_4_0_4}
 		\end{figure}
@@ -76,6 +76,19 @@
 	\end{align}
 	
 	As $ N $ increases, this number increases exponentially. The cost of inverting an $ n \times n $ matrix can be shown to be of $ \order{n^3} $. Therefore, computers become increasingly slow at inverting these matrices as the system becomes bigger, and at one point, become incapable of even storing the Hamiltonian matrix in the RAM.
+	
+	\begin{figure}[h!]
+		\centering
+		\subfigure[Basis size with number of sites]{
+			\includegraphics[width = 0.45\linewidth]{bsize.pdf}
+			}
+			\subfigure[The basis size in $ \log_{10} $ scale with  umbe rof sites]{
+				\includegraphics[width = 0.45\linewidth]{bsizelog.pdf}
+			}
+		\caption{An ordinary and semilog plot showing how fast the basis size increases with incraesing number of sites. Even for relatively small sizes of $ N = 16 $, the basis size is of the order of $ 10^{8} $.}
+	\end{figure}
+	
+	
 
 	
 	
