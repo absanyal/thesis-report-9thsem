@@ -1,0 +1,85 @@
+\chapter{\label{intro}Introduction}
+
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+%\baselineskip 20pt
+
+\section{Green's Functions}
+	The Green's function is an operator used to find the eigenvalues of a  Hamiltonian, $ \hat{\mathcal{H}} $, defined as
+	\begin{align}
+		\hat{G}\left(\omega\right) = \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}
+	\end{align}
+	where $ \omega $ is frequency and $ \eta $ is a small, non-zero constant called the regulator. $ \mathbb{I} $ is an identity matrix of the same dimension as $ \ham $.
+	
+	When operated on an eigenstate state $ \ket{\tilde{\psi_i}} $, we get the eigenvalue of $ \hat{G} $ as
+	\begin{align}
+		G\left(\omega\right) = \left[ \omega + \I \eta - \mathcal{E}_i \right]^{-1}
+	\end{align}
+	where $ \mathcal{E}_i $ is the eigenvalue of $ \ham $ with respect to $ \ket{\tilde{\psi_i}} $. Thus, we see that the eigenvalue of the Green's function is a function of $ \omega $ with poles at the eigenvalues of the Hamiltonian. The regulator prevents the eigenvalue from blowing up at these points. While methods to exactly diagonalize the Hamiltonian, such as \textit{Lanczos algorithm}, do exist, the Green's function method has several advantages over exact diagonalization methods. For example, exact diagonalization forces us to calculate the entire spectrum at a time. On the other hand, calculating the Green's function allows us to find the eigenvalues within any interval of $\omega$.
+    
+\section{Calculating physical observables from Green's function}
+	Given a many body system, we can construct a many body basis consisting of the states of the system.
+	\begin{align}
+		\mathcal{B} = \{ \ket{\psi_1}, \ket{\psi_2}, \dots \}
+	\end{align} 
+	
+	If we know how $ \ham $ acts on elements of $ \mathcal{B} $, we can calculate the matrix elements of the Green's function as
+	\begin{align}
+		\mel{\psi_i}{\hat{G}}{\psi_j} = \mel{\psi_i}{\left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}}{\psi_j}
+	\end{align}
+	
+	We now define the local spectral weight function as
+	\begin{align}
+		A_{i} \left( \omega \right) = -\frac{1}{\pi} \Im{ {\mel{\psi_i}{\hat{G}}{\psi_j}} }
+	\end{align}
+	It denotes the probability of finding the system within a given intervel of $ \omega $, provided it was initially in the state $ \ket{psi_i} $ and was allowed to evolve under the operation of the Hamiltonian.
+	
+	Following this, we now define the density of states as
+	\begin{align}
+		\rho \left( \omega \right) = \frac{1}{\mathcal{N}} \sum_{i = 1}^{\mathcal{N}} A_{i} \left( \omega \right)
+	\end{align}
+	where $ \mathcal{N} $ is the number of elements in $ \mathcal{B} $.
+	
+	In summary, we can calculate the density of states as
+	\begin{align}
+		\rho \left( \omega \right) = -\frac{1}{\mathcal{N \pi}} \Im{ \Tr( \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1} ) }
+	\end{align}
+	We shall call this method of obtaining the Green's function and the related quantities as the \emph{direct inversion method}.
+	
+	Spectral weight function and density of states of importance as they can be directly measured in experiments through techniques such as ARPES (angle-resolved photoemission spectroscopy).
+	
+	\subsection*{Example}
+		Consider a 1D crystal with N sites and N fermions. The system has $ \tfrac{N}{2} $ particles with spin $ +\tfrac{1}{2} $ and $ \tfrac{N}{2} $ with spin $ -\tfrac{1}{2} $. When two particles of opposite spins occupy the same site, an energy cost of $ U $ is added to the system per double-occupancy. The system evolves under the nearest-neighbor hopping tight-binding Hamiltonian,
+		\begin{align}\label{eqn:tight-binding-hamil}
+			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{\expval{i,j}} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{j, \sigma} + \mathrm{h.c.} \right) + U \sum_{i}\hat{n}_{\uparrow} \hat{n}_{\downarrow}
+		\end{align}
+		
+		Using the values $ N = 4 $, $ t = 1 $ and $ U = 4 $, we obtain the density of states shown in figure \ref{fig:4_4_0_4}.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=1\linewidth]{image/4_4_0_4}
+			\caption{DoS for the 4 site 4 particle half-illed Hubbard model, obtained by direct inversion.}
+			\label{fig:4_4_0_4}
+		\end{figure}
+
+\section{Numerical issues with direct inversion}
+	Although the Green's function method does not require costly diagonalizations, we instead incur the cost of inverting matrices. In the direct inversion method, we are required to invert a matrix the size of the Hamiltonian, whose dimension equals that of the basis size. For a 1D crystal with $ N $ sites, $ p_{\uparrow} $ spin-up particles and $ p_{\downarrow} $ spin-down particles, the size of the basis can be shown to be
+	\begin{align}
+		\mathrm{Size}\left( \mathcal{B} \right) =
+		\frac{\left( N! \right)^{2} }{p_{\uparrow}!\,p_{\downarrow}!\,\left( N-p_{\uparrow}!\right) \left( N-p_{\downarrow}!\right) }
+	\end{align}
+	With $ p_{\uparrow} = p_{\downarrow} = \tfrac{N}{2} $, we get
+	\begin{align}
+		\mathrm{Size}\left( \mathcal{B} \right) =
+		\frac{\left( N! \right)^{2} }{\left( \tfrac{N}{2}! \right)^{4}}
+	\end{align}
+	
+	As $ N $ increases, this number increases exponentially. The cost of inverting an $ n \times n $ matrix can be shown to be of $ \order{n^3} $. Therefore, computers become increasingly slow at inverting these matrices as the system becomes bigger, and at one point, become incapable of even storing the Hamiltonian matrix in the RAM.
+
+	
+	
+	
+
+
+
