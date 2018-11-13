@@ -10,7 +10,7 @@
 	\begin{align}
 		\hat{G}\left(\omega\right) = \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}
 	\end{align}
-	where $ \omega $ is frequency and $ \eta $ is a small, non-zero constant called the regulator. $ \mathbb{I} $ is an identity matrix of the same dimension as $ \ham $.
+	where $ \omega $ is frequency and $ \eta $ is a small, non-zero constant called the regulator. For all calculations, we have set $ \eta = 0.1 $. $ \mathbb{I} $ is an identity matrix of the same dimension as $ \ham $.
 	
 	When operated on an eigenstate state $ \ket{\tilde{\psi_i}} $, we get the eigenvalue of $ \hat{G} $ as
 	\begin{align}
@@ -33,7 +33,7 @@
 	\begin{align}
 		A_{i} \left( \omega \right) = -\frac{1}{\pi} \Im{ {\mel{\psi_i}{\hat{G}}{\psi_j}} }
 	\end{align}
-	It denotes the probability of finding the system within a given intervel of $ \omega $, provided it was initially in the state $ \ket{psi_i} $ and was allowed to evolve under the operation of the Hamiltonian.
+	It denotes the probability of finding the system within a given intervel of $ \omega $, provided it was initially in the state $ \ket{\psi_i} $ and was allowed to evolve under the operation of the Hamiltonian.
 	
 	Following this, we now define the density of states as
 	\begin{align}
@@ -55,12 +55,12 @@
 			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{\expval{i,j}} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{j, \sigma} + \mathrm{h.c.} \right) + U \sum_{i}\hat{n}_{\uparrow} \hat{n}_{\downarrow}
 		\end{align}
 		
-		Using the values $ N = 4 $, $ t = 1 $ and $ U = 4 $, we obtain the density of states shown in figure \ref{fig:4_4_0_4}.
+		Using the values $ N = 6 $, $ t = -1 $ and $ U = 4 $, we obtain the density of states shown in figure \ref{fig:6_6_0_4}, direct inversion.
 		\begin{figure}[h!]
 			\centering
-			\includegraphics[width=1\linewidth]{4_4_0_4.pdf}
-			\caption{DoS for the 4 site 4 particle half-illed Hubbard model, obtained by direct inversion.}
-			\label{fig:4_4_0_4}
+			\includegraphics[width=1\linewidth]{6_6_0_4.pdf}
+			\caption{DoS for the 6 site, 6 particle half-filled Hubbard model, obtained by direct inversion, with $ U=4 $.}
+			\label{fig:6_6_0_4}
 		\end{figure}
 
 \section{Numerical issues with direct inversion}
