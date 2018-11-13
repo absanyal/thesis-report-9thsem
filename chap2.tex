@@ -1,0 +1,103 @@
+\chapter{\label{rgf}Recursive Green's function}
+
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+%\baselineskip 20pt
+
+\section{One-body recursive Green's functions}
+	The quantity shown in \eqref{eqn:dosfinal} requires us to know the elements of the Green's function matrix. Recursive Green's functions offer us a numerically efficient way to calculate these elements, allowing us to bypass the inversion of the entire matrix in lieu of inverting and multiplying smaller matrices.
+	
+	Let us consider the simple case of a single particle on a one-dimensional lattice with $ N $ sites. Let $ \epsilon_i $ be the on-site energy of each site. Let $ U_{ij} $ be the hopping constant between the $ i $-th and $ j $-th sites. If all $ U_{ij} = 0 $, there is no hopping between the sites, and each site becomes isolated. The Hamiltonian of such an isolated site is only the on-site energy. Let us denote the isolated Green's function of each site as
+	\begin{align}
+		g_{i} \left( \omega \right) = \left[ \omega + \I \eta - \epsilon_i \right]^{-1}
+	\end{align}
+	The idea is to connect these isolated (and independent) Green's functions using the hopping elements. The connection will be done directionally. If a site is connected to all the sites to its left, we denote it by $ G^{L}_{i} $; similarly, for the right, we call it $ G^{R}_{i} $. For a site connected both to its left and right, we denote it by $ G^{c}_i $.
+	
+	In order to connect the sites, we use the two equivalent form of Dyson's equations:
+	\begin{align}
+		G = G^{(0)} + G^{(0)}VG\label{eqn:dysonleft}\\
+		G = G^{(0)} + GVG^{(0)}\label{eqn:dysonright}
+	\end{align}
+	Here, $ G $ denotes the connected Green's function, $ G^{(0)} $ is the unperturbed Green's function and $ V $ is the perturbation into which we selectively incorporate the appropriate hopping constants. Depending on which sites we are looking to connect, we appropriately select $ G^{(0)} $ and $ V $ and calculate the matrix elements of the Dyson equation.
+	
+	As there are no sites to the left of the first site, trivially,
+	\begin{align}
+		G^{L}_{1} = g_{1}
+	\end{align}
+	Similarly, we can argue that
+	\begin{align}
+	G^{R}_{N} = g_{N}
+	\end{align}
+	To calculate $ G^{L}_{2} $, we choose
+	\begin{align}
+		G^{0} = G^{L}_{1}\ketbra{1}{1} + g_2 \ketbra{2}{2}\\
+		V = U_{12}\ketbra{1}{2} + U_{21}\ketbra{2}{1}
+	\end{align}
+	From \eqref{eqn:dysonleft}, we calculate
+	\begin{align}
+		\nonumber&&\mel{2}{G}{2} &= g_2 + \mel{2}{G^{0}\sum_{m}\ketbra{m}{m}V\sum_{m'}\ketbra{m'}{m'}G}{2} \\
+		\Rightarrow && G^{L}_{2} &= \left[ g^{-1}_2 + g_2 U_{12} G^{L}_{12} \right]^{-1}
+	\end{align}
+	Similarly, we get
+	\begin{align}
+		G^{L}_{12} = g_1 U_{21} G^{L}_{22}
+	\end{align}
+	Combining these two and rearranging, we get
+	\begin{align}
+		G^{L}_{22} = \left[ g^{-1}_2 - U_{21} g_1 U_{12}  \right]^{-1}
+	\end{align}
+	Any left connected Green's function for subsequent sites can now be calculated as
+	\begin{align}
+		G^{L}_{i,i} = \left[ g^{-1}_i - U_{i,i-1}\,g_{i-1}\,U_{i-1,i}  \right]^{-1}
+	\end{align}
+	Similarly, using \eqref{eqn:dysonright}, we can calculate any right connected Green's function as
+	\begin{align}
+		G^{R}_{i,i} = \left[ g^{-1}_i - U_{i,i+1}\,g_{i+1}\,U_{i+1,i}  \right]^{-1}
+	\end{align}
+	Finally, in order to connect any site to its two nearest neighbors, we choose
+	\begin{align}
+		G^{0} &= g_{i}\ketbra{i}{i} + G^{L}_{i-1}\ketbra{i-1}{i-1} + G^{R}_{i+1}\ketbra{i+1}{i+1}\\
+		V &= U_{i-i,i}\ketbra{i-1}{i} + U_{i,i-1}\ketbra{i}{i-1} + U_{i+i,i}\ketbra{i+1}{i} + U_{i,i+1}\ketbra{i}{i+1}
+	\end{align}
+	This gives us the fully connected Green's function of any site as
+	\begin{align}
+		\nonumber G^{c}_{i,i} &= \left[ g^{-1}_{i} - U_{i,i-1} G^{L}_{i-1, i-1} U_{i-1,i} - U_{i,i+1} G^{R}_{i+1,i+1} U_{i+1,i} \right]\\
+		&= \left[ \omega + \I \eta -\epsilon_i - U_{i,i-1} G^{L}_{i-1, i-1} U_{i-1,i} - U_{i,i+1} G^{R}_{i+1,i+1} U_{i+1,i} \right]
+	\end{align}
+	Thus, every site contains the spectral information of its two neighboring sites, which recursively contain information about the remaining sites. This gives us the diagonal elements of the Green's function, required to find the spectral weight function. It is also possible to find the off-diagonal elements using the relations:
+	\begin{align}
+		G^{c}_{i-1,i} = G^{L}_{i-1,i-1} U_{i-1,i} G^{c}_{i,i}\\
+		G^{c}_{i+1,i} = G^{R}_{i+1,i+1} U_{i+1,i} G^{c}_{i,i}\\
+		G^{c}_{i,i+1} = G^{c}_{i,i} U_{i,i+1} G^{R}_{i+1,i+1}
+	\end{align}
+
+\section{Generalization to many-body systems}
+	The above equations have been derived in a manner that even if we substitute the isolated Green's functions and hopping constants with matrices, the equations still hold.
+	However, we cannot trivially assign the isolated Green's function to a site. In fact, it is not feasible to perform the recursion in real space. Instead, we perform the recursion in Fock space. This requires recasting the many-body problem in a new language.
+	
+	Consider a half-filled $ N $-site lattice, with $ \tfrac{N}{2} $ each of up- and down-spin particles. Without loss of generality, we assume that $ N $ is even and divide the system into two halves, with $ \tfrac{N}{2} $ sites on each site. Suppose there are $ p $ particles in the left sector, which means we have $ N-p $ particles on the right. As the system is half-filled, $ p $ takes a value from $ 0 $ to $ N $. Let the set of states that contain $ p $ particles on the left be denoted by $ \mathcal{B}_{p} $. We observe that each such set is mutually exclusive, and the sets exhaust the entire basis. Then, the full basis is given as
+	\begin{align}
+		\mathcal{B} = \bigcup_{p = 0}^{N} \mathcal{B}_p
+	\end{align}
+	
+	Now, under the action of the Hamiltonian, if particles move across the middle partition of the lattice, then, states of $ \mathcal{B}_p $ can become a state of $ \mathcal{B}_{q} $, where $ \abs{p-q} = 1 $. Therefore, there can only be connecting matrix elements between states of $ \mathcal{B}_p $ and $ \mathcal{B}_{p \pm 1} $. Further, we observe that, if we set the hopping constant across the middle partition to zero, the particle numbers on each site cannot change. So, states inside a given $ \mathcal{B}_p $ can only now map to states inside it. Thus, we can use each set $ \mathcal{B}_p $ as a 'site' in the Fock space. The Hamiltonian matrix elements for each $ \mathcal{B}_p $ is given as
+	\begin{align}
+		H_{p} = \mel{p_i}{H}{p_j}
+	\end{align}
+	where $ p_i, p_j \in \mathcal{B}_p$. The matrix connecting two Fock space sites is given by \begin{align}
+		U_{p,q}\mel{p_i}{H}{q_j}
+	\end{align}
+	Because of the additional constraint $ \abs{p-q} = 1 $ for a non-zero $ U_{p,q} $, we see that the problem now maps exactly to the one-body problem. We can employ the method of recursive Green's functions to calculate the density of states of this system.
+	
+	Instead of inverting the whole matrix, we now invert a number of smaller matrices.
+	Let $ d_p $ be the dimension of a $ \mathcal{B}_p $. Then, the cost of inversion is $ \order{\sum_{p=0}^{N} d^{3}_p} $. If we consider $ d = \max_p \left( d_p \right)  $, then, approximately, the inversion cost is $ \sim \order{N d^3} $, which scales linearly with $ N $, as opposed to with $ N^3 $. 
+	
+\section{Numerical drawbacks}
+	
+	
+	
+	
+	
+	
+	
