@@ -66,13 +66,13 @@
 		&= \left[ \omega + \I \eta -\epsilon_i - U_{i,i-1} G^{L}_{i-1, i-1} U_{i-1,i} - U_{i,i+1} G^{R}_{i+1,i+1} U_{i+1,i} \right]
 	\end{align}
 	Thus, every site contains the spectral information of its two neighboring sites, which recursively contain information about the remaining sites. This gives us the diagonal elements of the Green's function, required to find the spectral weight function. It is also possible to find the off-diagonal elements using the relations:
-	\begin{align}
+	\begin{align}\label{eqn:connecting-eqn-onebody}
 		G^{c}_{i-1,i} = G^{L}_{i-1,i-1} U_{i-1,i} G^{c}_{i,i}\\
 		G^{c}_{i+1,i} = G^{R}_{i+1,i+1} U_{i+1,i} G^{c}_{i,i}\\
 		G^{c}_{i,i+1} = G^{c}_{i,i} U_{i,i+1} G^{R}_{i+1,i+1}
 	\end{align}
 
-\section{Generalization to many-body systems}
+\section{Generalization to many-body systems}\label{sec:generalized-manybody}
 	The above equations have been derived in a manner that even if we substitute the isolated Green's functions and hopping constants with matrices, the equations still hold.
 	However, we cannot trivially assign the isolated Green's function to a site. In fact, it is not feasible to perform the recursion in real space. Instead, we perform the recursion in Fock space. This requires recasting the many-body problem in a new language.
 	
@@ -83,17 +83,25 @@
 	
 	Now, under the action of the Hamiltonian, if particles move across the middle partition of the lattice, then, states of $ \mathcal{B}_p $ can become a state of $ \mathcal{B}_{q} $, where $ \abs{p-q} = 1 $. Therefore, there can only be connecting matrix elements between states of $ \mathcal{B}_p $ and $ \mathcal{B}_{p \pm 1} $. Further, we observe that, if we set the hopping constant across the middle partition to zero, the particle numbers on each site cannot change. So, states inside a given $ \mathcal{B}_p $ can only now map to states inside it. Thus, we can use each set $ \mathcal{B}_p $ as a 'site' in the Fock space. The Hamiltonian matrix elements for each $ \mathcal{B}_p $ is given as
 	\begin{align}
-		H_{p} = \mel{p_i}{H}{p_j}
+		{\ham^{p}}_{ij} = \mel{p_i}{\ham}{p_j}
 	\end{align}
 	where $ p_i, p_j \in \mathcal{B}_p$. The matrix connecting two Fock space sites is given by \begin{align}
-		U_{p,q}\mel{p_i}{H}{q_j}
+		U^{p,q}_{ij} = \mel{p_i}{\ham}{q_j}
 	\end{align}
-	Because of the additional constraint $ \abs{p-q} = 1 $ for a non-zero $ U_{p,q} $, we see that the problem now maps exactly to the one-body problem. We can employ the method of recursive Green's functions to calculate the density of states of this system.
+	Because of the additional constraint $ \abs{p-q} = 1 $ for a non-zero $ U_{p,q} $, we see that the problem now maps exactly to the one-body problem, with the definition
+	\begin{align}
+		g_p\left(\omega\right) = \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham^{p} \right]^{-1} 
+	\end{align}
+	We can employ the method of recursive Green's functions to calculate the density of states of this system.
 	
 	Instead of inverting the whole matrix, we now invert a number of smaller matrices.
-	Let $ d_p $ be the dimension of a $ \mathcal{B}_p $. Then, the cost of inversion is $ \order{\sum_{p=0}^{N} d^{3}_p} $. If we consider $ d = \max_p \left( d_p \right)  $, then, approximately, the inversion cost is $ \sim \order{N d^3} $, which scales linearly with $ N $, as opposed to with $ N^3 $. 
-	
-\section{Numerical drawbacks}
+	Let $ d_p $ be the dimension of a $ \mathcal{B}_p $. Then, the cost of inversion is $ \order{\sum_{p=0}^{N} d^{3}_p} $. If we consider $ d = \max_p \left( d_p \right)  $, then, approximately, the inversion cost is $ \sim \order{N d^3} $, which scales linearly with $ N $, as opposed to with $ N^3 $. Another advantage of this method is that each $ g_p $ being independent, they can be calculated in parallel and stored, and then, later, can be called serially for connecting with its neighbors. Then, the time cost of obtaining the isolated Green's function is limited by the largest one. However, There are some significant numerical hurdles in this method.
+	\begin{enumerate}
+		\item As $ N $ becomes larger, the size of each $ B_p $ will increase, making calculation of even a single $ g_p $ very costly.
+		\item As the basis has no inherent ordering, we are forced to explicitly calculate the matrix elements of the isolated Green's functions and the connecting matrices. This becomes very time consuming as each $ \mathcal{B}_p $ becomes larger.
+		\item 	Specifically, the lack of definite order in the basis makes the problem very difficult to handle. This becomes evident in the difficulty of keeping track of the number of particle sectors in each $ \mathcal{B}_p $ that needs to be calculated, in the algorithm.
+	\end{enumerate}
+
 	
 	
 	
