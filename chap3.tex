@@ -56,4 +56,41 @@
 \section{Organizing the basis}
 	We will now device an algorithm to organize the basis, such that we can easily identify isolated blocks. Moreover, the organization will allow us to observe symmetries in the Hamiltonian which will allow us to easily predict the structure of the isolated Hamiltonians and the connecting matrices, without resorting to long, explicit calculations.
 	
-	For the purpose of simplicity, this algorithm is currently only being developed for one-dimensional lattices with spin-less fermions.
+	For the purpose of simplicity, this algorithm is currently only being developed for one-dimensional lattices with spin-less fermions. Given a lattice, there are $ N $ sites on it, with $ n $ particles. We note that there are, therefore, $ N-1 $ partitions that separate these sites. For the graphical notation, we use:
+	\begin{itemize}
+		\item $ \e $ for an empty site.
+		\item $ \u $ for a site containing a spin-less fermion. For ease of typesetting, we use the symbol of a fermion with up spin, but the spin is of no significance in our discussion.
+		\item $ \p $ for denoting a partition. Although partitions exist between any two adjacent sites, only partitions of special interest are shown here.
+ 	\end{itemize}
+	
+	Now, we consider any such partition; there are two sites on either side of it, with the following possibilities:
+	\begin{enumerate}
+		\item $ \e \p \e $\\ 
+		There are no particles on either of these sites. We call this configuration $ a $.
+		\item  $ \e \p \u $\\
+		There is one particle to the right but the left is empty. We call this configuration $ b $.
+		\item $ \u \p \e $\\
+		There is one particle to the left but the right is empty. We call this configuration $ c $.
+		\item $ \u \p \u $\\
+		There are particles on both the sites. We call this configuration $ d $.
+	\end{enumerate}
+	
+	A set of states can now be classified by choosing a particular partition, indexed by $ S $, and specifying occupation status (a, b, c or d) on the two sites on either side of it, along with specifying the number of particles on all the sites to the left of the partition, denoted by $ n_S $. The configuration on the right of the partition is not known, but is the \textbf{same} for all the states in this group. A set of such states is labeled as $ \ket{S, k, n_s} $ where $ k \in \{a, b, c, d\} $.
+	
+	For example, consider the set $ \ket{5,c,2} $. Using the conventions given above, this set has the following properties:
+	\begin{enumerate}
+		\item There are 5 sites to the left of the partition, so a total of six sites.
+		\item The last two sites are in configuration $ c $, so, they are fixed as $ \u \p \u $.
+		\item As $ n_S = 2 $, there should be $ 2 $ particles to the left of the partition. One of these is fixed because of the configuration $ c $. This leaves one more particle to be placed in $ 4 $ sites, which can be done in $ 4 $ different ways.
+		\item Combining all this information we get the set as
+		\begin{align*}
+			\ket{5,c,2} =
+			\begin{cases}
+				\u \e \e \e \,\u \p\, \e \\
+				\e \u \e \e \u \p \e \\
+				\e \e \u \e \u \p \e \\
+				\e \e \e \u\,\,\,\u \p \e \\
+			\end{cases}
+		\end{align*}
+	\end{enumerate}
+	Therefore, we note that if we do not allow hopping across the $ 5 $th boundary, states inside $ \ket{5, c, 2} $ do not map to outside. This allows ud to set up our isolated Green's functions.
