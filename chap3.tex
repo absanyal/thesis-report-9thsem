@@ -1,0 +1,59 @@
+\chapter{\label{algo}Algorithm to organize the large many-body problem}
+
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+%\baselineskip 20pt
+
+\section{Simplifying the recursion formula}
+	The recursion formula shown in section  \ref{sec:generalized-manybody} involves connecting a large number of isolated Green's functions, each of which need to be calculated individually, as well as the connecting matrices, each of which needs to be calculated individually. Also, after calculating the isolated Green's functions, the left- and right-connected Green's functions must be calculated serially, as each result depends on the result before it.
+	
+	However, if the problem consists of only two sites, the right connected Green's function of the left site is its fully connected Green's function, and similarly, for the right site, it is the left one.
+	
+	Suppose, we divide the system into two 'sites' in the Fock space. The full Hamiltonian is given as
+	\begin{align}
+		\ham =
+		\begin{bmatrix}
+			H_1 	& 	U_{12} \\
+			U_{12} 	& 	H_2
+		\end{bmatrix}
+	\end{align}
+	where each element is a block matrix. In similar block matrix form, the Green's function's elements can be written as (after direct inversion)
+	\begin{align}
+		G =
+			\begin{bmatrix}
+			{G}^{c}_{11} 	& 	{G}^{c}_{12} \\
+			{G}^{c}_{12} 	& 	{G}^{c}_{22}
+			\end{bmatrix}
+	\end{align}
+	As the result is obtained after direct inversion, all matrix elements are fully connected.
+	
+	Combining this with \eqref{eqn:gf-def}, after rearranging, we can write
+	\begin{align}
+		\begin{bmatrix}
+			{G}^{c}_{11} 	& 	{G}^{c}_{12} \\
+			{G}^{c}_{12} 	& 	{G}^{c}_{22}
+		\end{bmatrix}
+		\begin{bmatrix}
+			g^{-1}_{1} 	& 	-U_{12} \\
+			-U_{12} 	& 	g^{-1}_{2}
+		\end{bmatrix} = 
+		\begin{bmatrix}
+			1 & 0\\
+			0 & 1
+		\end{bmatrix}
+	\end{align}
+	where $ g^{-1}_{i} = \omega +\I \eta - H_i $. $ 1 $ represents a block identity matrix, and $ 0 $ is a block null matrix.
+	
+	Multiplying the the two matrices on the left hand side and comparing term-by-term, we get
+	\begin{align}
+		G^{c}_{11} &= \left[ g^{-1}_{1} - U_{12}\,g_2\,U_{21}  \right]^{-1}\\
+		G^{c}_{22} &= \left[ g^{-1}_{2} - U_{21}\,g_1\,U_{12}  \right]^{-1}\\
+		G^{c}_{12} &= G^{c}_{11}\,U_{12}\,g_2\\
+		G^{c}_{21} &= G^{c}_{22}\,U_{21}\,g_1
+	\end{align}
+
+\section{Organizing the basis}
+	We will now device an algorithm to organize the basis, such that we can easily identify isolated blocks. Moreover, the organization will allow us to observe symmetries in the Hamiltonian which will allow us to easily predict the structure of the isolated Hamiltonians and the connecting matrices, without resorting to long, explicit calculations.
+	
+	For the purpose of simplicity, this algorithm is currently only being developed for one-dimensional lattices with spin-less fermions.
