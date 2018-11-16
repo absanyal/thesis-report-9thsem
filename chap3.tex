@@ -53,7 +53,7 @@
 		G^{c}_{21} &= G^{c}_{22}\,U_{21}\,g_1
 	\end{align}
 
-\section{Organizing the basis}
+\section{Algorithmically organizing the basis}
 	We will now device an algorithm to organize the basis, such that we can easily identify isolated blocks. Moreover, the organization will allow us to observe symmetries in the Hamiltonian which will allow us to easily predict the structure of the isolated Hamiltonians and the connecting matrices, without resorting to long, explicit calculations.
 	
 	For the purpose of simplicity, this algorithm is currently only being developed for one-dimensional lattices with spin-less fermions. Given a lattice, there are $ N $ sites on it, with $ n $ particles. We note that there are, therefore, $ N-1 $ partitions that separate these sites. For the graphical notation, we use:
@@ -93,4 +93,114 @@
 			\end{cases}
 		\end{align*}
 	\end{enumerate}
-	Therefore, we note that if we do not allow hopping across the $ 5 $th boundary, states inside $ \ket{5, c, 2} $ do not map to outside. This allows ud to set up our isolated Green's functions.
+	Therefore, we note that if we do not allow hopping across the $ 5 $th boundary, states inside $ \ket{5, c, 2} $ do not map to outside. This allows us to set up our isolated Green's functions in terms of these blocks.
+	
+	Now, in all states in the $ \ket{5, c, 2} $ block, the right-most site (site number six) is set to $ \e $. So, inside this block, me can now move to partition number $ 4 $, that is, the partition across the fourth and fifth sites. We see that across the $ 4 $th boundary, we have two possibilities. Three of them have the states have a configuration $ \e \p \u $, which, according to our convention, are labeled as $ \ket{4, b, 1} $, and one of them has the configuration $ \u \p\, \u $, which corresponds to a singleton set, $ \ket{4, d, 1} $.
+	
+	We can continue this process till we reach $ S = 1 $, which uniquely identifies each state in the basis. Also, we can utilize this organization to procedurally generate the basis. In order to do that, we need to know how a block can be subdivided. 
+	
+	Given a state $ \ket{S, \alpha_S, \beta_S, n_S} $, we can also tell the size of the block, that is, the number of actual states that will lie in the basis.
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{cc}
+			\toprule
+			k & Size \\
+			\midrule
+			$ a $ & $ \frac{(S-1)\,!}{n_S\,!(S - 1 -n_S)!} $ \vspace{3mm}\\
+			$ b $ & $ \frac{(S-1)\,!}{n_S\,!(S - 1 -n_S)!} $ \vspace{3mm}\\
+			$ c $ & $ \frac{(S-1)\,!}{(n_S - 1)\,!(S -n_S)!} $ \vspace{3mm}\\
+			$ d $ & $ \frac{(S-1)\,!}{(n_S - 1)\,!(S -n_S)!} $\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	For the purpose of this discussion, expand the notation $ \ket{S, k, n_S} $ and write it as $ \ket{S, \alpha_S, \beta_S, n_S} $, where $ \alpha_S $ is the number of particles on the site to the left of the partition, and $ \beta_S $ is the same for the right. We can correlate the two notations as
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{ccc}
+			\toprule
+			$ \alpha_S $ & $ \beta_S $ & $ k $ \\
+			\midrule
+			0 & 0 & $ a $\\
+			0 & 1 & $ b $\\
+			1 & 0 & $ c $\\
+			1 & 1 & $ d $\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	Without loss of generality, a block state can be subdivided into two sub-blocks at the $ S-1 $ level.
+	\begin{align*}
+		\ket{S, \alpha_S, \beta_S, n_S} = 
+		\begin{cases}
+			\ket{S-1, \alpha_{S-1} = 0, \beta_{S-1} = \alpha_S, n_{S-1} = n_S - \beta_{S-1} }\\
+			\ket{S-1, \alpha_{S-1} = 1, \beta_{S-1} = \alpha_S, n_{S-1} = n_S - \beta_{S-1} }\\
+		\end{cases}
+	\end{align*}
+	This was shown in the above case where
+	\begin{align*}
+		\ket{5,c, 2} =
+		\begin{cases}
+			\ket{4,b, 1}\\
+			\ket{4, d, 1}
+		\end{cases}
+	\end{align*}
+	
+%	\pagebreak
+	Using this, we can set up the following table:
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{cc}
+			\toprule
+			$ k $ at $ S $th level & Possible values of $ k $ at $ (S-1) $th level\\
+			\midrule
+			$ a $ & $ a $, $ c $\\
+			$ b $ & $ c $, $ d $\\
+			$ c $ & $ b $, $ d $\\
+			$ d $ & $ b $, $ d $\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	\pagebreak
+	
+	However, if we na\"{\i}vely try to subdivide each block into two separate blocks, we will get incorrect results. In order to match the results with what we obtain by actually looking at the states, we introduce the following conditions, \textbf{which must \emph{all} be \emph{false}} for a state to be considered valid, after obtaining it via subdivision:
+	\begin{enumerate}
+		\item $ S < 1 $
+		\item $ n_S < 0 $
+		\item $ S - 1 < n_S - \alpha_S $
+		\item $ n_S < \alpha_S $
+	\end{enumerate}
+	If any of these (except the first one) is true, it leads to a violation of particle number conservation within that  block and hence, that block is discarded. The first condition being true simply corresponds to a physically impossible state.
+	
+	Now, we introduce a convention. Within each block, the sub-blocks must always be arranged in the order $ a, c, b, d $, whichever may be present inside the given block. Using this ordering introduces some symmetries into the basis, which we exploit to efficiently calculate the Green's functions of each block.
+	
+	Using all the above information, we will show we can form the basis efficiently, without having to explicitly calculate the configuration of each individual state. Suppose the system has $ N $ sites with $ n $ spin-less fermions. We define the following:
+	\begin{align*}
+		S_{\mathrm{max}} &= N-1\\
+		n_{S_{\mathrm{max}}} &= n
+	\end{align*}
+	Without loss of generality, we now initialize our basis with four blocks.
+	\begin{align*}
+		&\ket{S_{\mathrm{max}}, \,a\,, n_{S_{\mathrm{max}}}}\\
+		&\ket{S_{\mathrm{max}}, \,c\,, n_{S_{\mathrm{max}}}}\\
+		&\ket{S_{\mathrm{max}}, \,b\,, n_{S_{\mathrm{max}}}-1}\\
+		&\ket{S_{\mathrm{max}}, \,d\,, n_{S_{\mathrm{max}}}-1}
+	\end{align*}
+	
+	In the next iteration, we subdivide each block according to the above algorithm to obtain blocks at level $ S=4 $. We keep going down till $ S=1 $. This gives us all the elements of the basis, without explicitly having to calculate the particle configuration of each state. Since we are not calculating the large particle configuration for each state, this method is both fast and memory efficient. Moreover, we will see that although we did not calculate the explicit structure of each state, by exploiting the order introduced in the basis, we can calculate the Green's functions efficiently.
+	
+	\subsection*{Example of basis generation}
+	Consider a 4 site lattice with 2 particles. Then,
+	\begin{align*}
+		S_{\mathrm{max}} &= 3\\
+		n_{S_{\mathrm{max}}} &= 2
+	\end{align*}
+	We start with the following initial states:
+	
+	\begin{align*}
+		&\ket{3, \,a\,, 2}\\
+		&\ket{3, \,c\,, 2}\\
+		&\ket{3, \,b\,, 1}\\
+		&\ket{3, \,d\,, 1}
+	\end{align*}
+	
