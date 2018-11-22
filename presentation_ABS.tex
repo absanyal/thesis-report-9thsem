@@ -1,0 +1,287 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+\usepackage[english]{babel}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{hyperref}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\newcommand{\I}{\mathrm{i}}
+\newcommand{\ham}{\hat{\mathcal{H}}}
+
+\renewcommand{\u}{\uparrow\ }
+\renewcommand{\d}{\downarrow\ }
+\newcommand{\ud}{\uparrow\downarrow}
+\newcommand{\e}{\ \underline{\ \ }\ }
+\newcommand{\p}{\ |\ }
+
+\graphicspath{{./image/}}
+
+\title{Generalization of Recursive Green's Functions for Many-body Systems}
+
+% A subtitle is optional and this may be deleted
+%\subtitle{Optional Subtitle}
+
+\author{Amit Bikram Sanyal\inst{1}}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[] % (optional, but mostly needed)
+{
+  \inst{1}%
+  School of Physical Sciences\\
+  National Institute of Science Education and Research
+ }
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{\today}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+%\subject{Theoretical Computer Science}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+ \pgfdeclareimage[height=0.5cm]{university-logo}{image/logo1}
+ \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents[pausesections]
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+\section{Green's Function}
+\subsection{Definition}
+\begin{frame}{Definition}
+	\begin{itemize}
+		\item{
+			Green's functions allow us to find the eigenvalues of an operator without resorting to costly exact diagonalization methods.
+			}
+		\item{ 
+			The Green's function operator is defined as\,\cite{coleman_2015}
+			\begin{align}\label{eqn:gf-def}
+				\hat{G}\left(\omega\right) = \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}
+			\end{align}
+			}
+		\item{
+			For a non-interacting Hamiltonian, the Green's function operator is diagonal. In general, there are non-zero off-diagonal elements.
+		}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Interpreting the eigenvalues}
+	\begin{itemize}
+		\item{
+		For an eigenstate state $ \ket{\tilde{\psi_i}} $ of $ \ham $, the eigenvalue of $ \hat{G} $ is
+		\begin{align}
+		G\left(\omega\right) = \left[ \omega + \I \eta - \mathcal{E}_i \right]^{-1}
+		\end{align}
+		}
+		\item {
+		At the limit $ \eta \rightarrow 0 $, $ G(\omega) $ has a pole at $ \mathcal{E}_{i} $.
+		}
+		\item {
+			Exact diagonalization methods such as \textit{Lanczos algorithm} forces us to calculate the entire spectrum at a time, while Green's function allows us to find the eigenvalues within any interval of $\omega$.
+		}
+	\end{itemize}
+\end{frame}
+
+\subsection{Calculation of physical observables}
+	\begin{frame}{Calculation of physical observables}
+		\begin{itemize}
+		\item {
+			Given a many body system, we can construct a many body basis consisting of the possible configurations of the system.
+			\begin{align}
+			\mathcal{B} = \{ \ket{\psi_1}, \ket{\psi_2}, \dots, \ket{\psi_{\mathcal{N}}} \}
+			\end{align} 
+			}
+		\item {\pause
+			The matrix corresponding to the Hamiltonian can be calculated element-wise.
+			\begin{align}
+				\mathcal{H}_{i,\,j} = \mel{\psi_i}{\ham}{\psi_j}
+			\end{align}
+			}
+		\item {\pause
+			The matrix elements of the Green's function are then given as
+			 \begin{align}
+			 \mel{\psi_i}{\hat{G}}{\psi_j} = \mel{\psi_i}{\left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}}{\psi_j}
+			 \end{align}
+			}
+	\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Calculation of physical observables}
+		\begin{itemize}
+			\item {
+				We now define the local spectral weight function as
+				\begin{align}
+				A_{i} \left( \omega \right) = -\frac{1}{\pi} \Im{ {\mel{\psi_i}{\hat{G}}{\psi_i}} }
+				\end{align}
+				}
+			\item {\pause
+				Following this, we now define the density of states as
+				\begin{align}\label{eqn:dossum}
+				\nonumber\rho \left( \omega \right) &= \frac{1}{\mathcal{N}} \sum_{i = 1}^{\mathcal{N}} A_{i} \left( \omega \right)\\
+				&= -\frac{1}{\mathcal{N \pi}} \Im{ \Tr( \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1} ) }
+				\end{align}
+				}
+			\item {
+				Density of states can be measured by experimental methods such as ARPES.
+				}
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Calculation of physical observables}
+		\begin{itemize}
+			\item{
+				As an example, we consider a 1D crystal with $ N $ sites with $ \tfrac{N}{2} $ spin $ +\tfrac{1}{2} $ fermions and $ \tfrac{N}{2} $ spin $ -\tfrac{1}{2} $ fermions.
+				}
+			\item {
+				The system evolves with the tight-binding Hamiltonian with on-site particle-particle interaction.
+			\begin{align}\label{eqn:tight-binding-hamil}
+			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{i=1}^{N-1} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{i + 1, \sigma} + \mathrm{h.c.} \right) + U \sum_{i=1}^{N}\hat{n}_{i,\uparrow} \hat{n}_{i,\downarrow}
+			\end{align} }
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Calculation of physical observables}
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.7\linewidth]{6_6_0_4.pdf}
+			\caption{DoS for the 6 site, 6 particle half-filled Hubbard model, obtained by direct inversion, with $ U=4 $.}
+			\label{fig:6_6_0_4}
+		\end{figure}
+	\end{frame}
+
+\subsection{Numerical cost analysis}
+\begin{frame}{Numerical cost of direct inversion}
+	\begin{itemize}
+		\item{
+			For a 1D crystal with $ N $ sites, $ p_{\uparrow} $ spin-up particles and $ p_{\downarrow} $ spin-down particles, and $ p_{\uparrow} = p_{\downarrow} = \tfrac{N}{2} $, the size of the basis can be shown to be
+				\begin{align}
+				\mathrm{Size}\left( \mathcal{B} \right) =
+				\frac{\left( N! \right)^{2} }{\left( \tfrac{N}{2}! \right)^{4}}
+				\end{align}
+			}
+		\item {\pause
+			This number increases exponentially with $ N $.
+			}
+		\begin{figure}[h!]
+			\centering
+				\includegraphics[width = 0.3\linewidth]{bsize.pdf}\hspace{1cm}
+				\includegraphics[width = 0.3\linewidth]{bsizelog.pdf}
+			\caption{An ordinary and semilog plot showing how fast the basis size increases with increasing number of sites.}
+		\end{figure}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Problems arising for large values of $ N $}
+	\begin{itemize}
+		\item Takes long time to calculate all configurations of the basis and all matrix elements.
+		\item Difficult to store large $ N \cross N $ matrix in computer memory prior to inversion.
+		\item Matrix inversion is an order $ \order{N^3} $ process, which becomes costlier in larger systems.
+	\end{itemize}
+\end{frame}
+
+\section{Recursive Green's functions}
+\subsection{One body recursive Green's functions}
+	\begin{frame}{Idea behind recursive Green's functions}
+		\begin{itemize}
+			\item{
+			Consider a one dimensional lattice with $ N $ sites.
+			}
+			\item {\pause
+				We calculate the isolated Green's function of each site, which is the Green's function of a site in absence of hopping.
+				\begin{align}
+				g_{i} \left( \omega \right) = \left[ \omega + \I \eta - \epsilon_i \right]^{-1}
+				\end{align}
+				}
+			\item{\pause
+				We show that there exists a recursive relation for the full Green's function of each site, in terms of the isolated Green's function and the hopping constants between the sites.
+				}
+		\end{itemize}
+	\end{frame}
+
+\begin{frame}{Connecting isolated Green's functions}
+	
+\end{frame}
+
+\begin{frame}{References}
+	\bibliographystyle{plain}
+	\bibliography{reflist.bib}
+\end{frame}
+\end{document}
+
+
