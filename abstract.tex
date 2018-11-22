@@ -1,7 +1,6 @@
 \begin{center}
 {\large {\bf  ABSTRACT }}
 \end{center}  
+The Green's function of a system of particles allows us to calculate the density of states for the system, without having to resort to exact diagonalization methods. However, the method still becomes costly for larger systems, as it involves calculating and inverting the Hamiltonian matrix. The recursive Green's function formalism for a single body allows us to calculate the Green's functions of disconnected parts of the system, called isolated Green's functions, and then connect them using Dyson's equations to obtain the Green's functions for the entire connected system.
 
-
-    
-
+We have generalized the recursive Green's function method to many body systems, and shown that the connections can be done very easily in Fock space, instead of real space. We have developed an algorithm which allows us to efficiently reorganize the Hamiltonian in a fractal-like structure, and using these symmetries, we can easily calculate and connect the Green's functions without explicitly calculating the matrix elements of the Hamiltonian. The method reduces the cost of calculation of Green's functions from $ \order{n^3} $ to $ \order{n} $, where $ n $ is the dimension of the Hamiltonian, and the method is parallelizable and scalable. This allows us to calculate Green's functions for systems much larger than what is possible by regular inversion methods.

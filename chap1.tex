@@ -6,7 +6,7 @@
 %\baselineskip 20pt
 
 \section{Green's Functions}
-	The Green's function is an operator used to find the eigenvalues of a  Hamiltonian, $ \hat{\mathcal{H}} $, defined as
+	The Green's function is an operator used to find the eigenvalues of a  Hamiltonian, $ \hat{\mathcal{H}} $, defined as \cite{coleman_2015}
 	\begin{align}\label{eqn:gf-def}
 		\hat{G}\left(\omega\right) = \left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}
 	\end{align}
@@ -50,9 +50,9 @@
 	Spectral weight function and density of states of importance as they can be directly measured in experiments through techniques such as ARPES (angle-resolved photoemission spectroscopy).
 	
 	\subsection*{Example}
-		Consider a 1D crystal with N sites and N fermions. The system has $ \tfrac{N}{2} $ particles with spin $ +\tfrac{1}{2} $ and $ \tfrac{N}{2} $ with spin $ -\tfrac{1}{2} $. When two particles of opposite spins occupy the same site, an energy cost of $ U $ is added to the system per double-occupancy. The system evolves under the nearest-neighbor hopping tight-binding Hamiltonian,
+		Consider a 1D crystal with $ N $ sites and $ N $ fermions. The system has $ \tfrac{N}{2} $ particles with spin $ +\tfrac{1}{2} $ and $ \tfrac{N}{2} $ with spin $ -\tfrac{1}{2} $. When two particles of opposite spins occupy the same site, an energy cost of $ U $ is added to the system per double-occupancy. The system evolves under the nearest-neighbor hopping tight-binding Hamiltonian,
 		\begin{align}\label{eqn:tight-binding-hamil}
-			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{\expval{i,j}} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{j, \sigma} + \mathrm{h.c.} \right) + U \sum_{i}\hat{n}_{\uparrow} \hat{n}_{\downarrow}
+			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{i=1}^{N-1} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{i + 1, \sigma} + \mathrm{h.c.} \right) + U \sum_{i=1}^{N}\hat{n}_{i,\uparrow} \hat{n}_{i,\downarrow}
 		\end{align}
 		
 		Using the values $ N = 6 $, $ t = -1 $ and $ U = 4 $, we obtain the density of states shown in figure \ref{fig:6_6_0_4}, direct inversion.

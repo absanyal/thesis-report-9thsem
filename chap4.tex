@@ -1,0 +1,57 @@
+\chapter{\label{results}Numerical results}
+
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+%\baselineskip 20pt
+
+We will now demonstrate some spectra of a few sample systems. We have considered a one-dimensional, half-filled lattice, with spin-less fermions undergoing nearest neighbor interaction as per the Hamiltonian shown in equation \eqref{eqn:spinlessH}. We have taken 6 sites in the lattice with 2, 3 and 4 particles. The results have been calculated  at different values of the nearest neighbor interactions, using both recursive Green's functions as well as direct inversion, and we see that the results match when we superpose them.
+
+\section{6 sites with 2 particles}
+\begin{figure}[h!]
+	\centering
+	\subfigure[$ U^{NN} = 0 $]{
+		\includegraphics[width = 0.45\linewidth]{6s2p_U_0.pdf}
+	}
+	\subfigure[$ U^{NN} = 8 $]{
+		\includegraphics[width = 0.45\linewidth]{6s2p_U_8.pdf}
+	}
+	\caption{Density of states of 2 particles on 6 sites, in absence and presence of interaction. As $ \nu_i $ can only take the value $ 1 $, we see the system being split into two bands.}
+\end{figure}
+
+\section{6 sites with 3 particles}
+\begin{figure}[h!]
+	\centering
+	\subfigure[$ U^{NN} = 0 $]{
+		\includegraphics[width = 0.45\linewidth]{6s3p_U_0.pdf}
+	}
+	\subfigure[$ U^{NN} = 8 $]{
+		\includegraphics[width = 0.45\linewidth]{6s3p_U_8.pdf}
+	}
+	\caption{Density of states of 3 particles on 6 sites, in absence and presence of interaction. As $ \nu_i $ can only take the values $ \{ 0, 1, 2\} $, we see the system being split into three bands.}
+\end{figure}
+
+\section{6 sites with 4 particles}
+\begin{figure}[h!]
+	\centering
+	\subfigure[$ U^{NN} = 0 $]{
+		\includegraphics[width = 0.45\linewidth]{6s4p_U_0.pdf}
+	}
+	\subfigure[$ U^{NN} = 8 $]{
+		\includegraphics[width = 0.45\linewidth]{6s4p_U_8.pdf}
+	}
+	\caption{Density of states of 4 particles on 6 sites, in absence and presence of interaction. As $ \nu_i $ can only take the values $ \{ 1, 2, 3 \} $, we see the system being split into three bands. The non-interacting spectra of the 4 particle case is the same as that of the two particles, due to particles and holes being equivalent.}
+\end{figure}
+
+\pagebreak
+\section{Future outlooks}
+The following have been planned for the second half of the project:
+\begin{enumerate}
+	\item Optimization of the code to allow us to efficiently calculate larger systems at lower time and memory cost.
+	
+	\item Extending the model to two dimensions.
+	
+	\item Extending the model for fermions with spins.
+	
+	\item Addition of approximations which allow us to calculate the approximate spectrum of large systems, by discarding high-energy excitations, in similar spirit to the Gutzwiller approximation.
+\end{enumerate}

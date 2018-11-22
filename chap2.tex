@@ -14,7 +14,7 @@
 	\end{align}
 	The idea is to connect these isolated (and independent) Green's functions using the hopping elements. The connection will be done directionally. If a site is connected to all the sites to its left, we denote it by $ G^{L}_{i} $; similarly, for the right, we call it $ G^{R}_{i} $. For a site connected both to its left and right, we denote it by $ G^{c}_i $.
 	
-	In order to connect the sites, we use the two equivalent form of Dyson's equations:
+	In order to connect the sites, we use the two equivalent form of Dyson's equations\cite{2013arXiv1304.3934L}:
 	\begin{align}
 		G = G^{(0)} + G^{(0)}VG\label{eqn:dysonleft}\\
 		G = G^{(0)} + GVG^{(0)}\label{eqn:dysonright}
@@ -39,7 +39,7 @@
 		\nonumber&&\mel{2}{G}{2} &= g_2 + \mel{2}{G^{0}\sum_{m}\ketbra{m}{m}V\sum_{m'}\ketbra{m'}{m'}G}{2} \\
 		\Rightarrow && G^{L}_{2} &= \left[ g^{-1}_2 + g_2 U_{12} G^{L}_{12} \right]^{-1}
 	\end{align}
-	Similarly, we get
+	Similarly, we can show that the off-diagonal elements are
 	\begin{align}
 		G^{L}_{12} = g_1 U_{21} G^{L}_{22}
 	\end{align}
@@ -74,7 +74,7 @@
 
 \section{Generalization to many-body systems}\label{sec:generalized-manybody}
 	The above equations have been derived in a manner that even if we substitute the isolated Green's functions and hopping constants with matrices, the equations still hold.
-	However, we cannot trivially assign the isolated Green's function to a site. In fact, it is not feasible to perform the recursion in real space. Instead, we perform the recursion in Fock space. This requires recasting the many-body problem in a new language.
+	However, we cannot trivially assign the isolated Green's function to a site in the many-body problem. In fact, it is not feasible to perform the recursion in real space. Instead, we perform the recursion in Fock space. This requires recasting the many-body problem in a new language.
 	
 	Consider a half-filled $ N $-site lattice, with $ \tfrac{N}{2} $ each of up- and down-spin particles. Without loss of generality, we assume that $ N $ is even and divide the system into two halves, with $ \tfrac{N}{2} $ sites on each site. Suppose there are $ p $ particles in the left sector, which means we have $ N-p $ particles on the right. As the system is half-filled, $ p $ takes a value from $ 0 $ to $ N $. Let the set of states that contain $ p $ particles on the left be denoted by $ \mathcal{B}_{p} $. We observe that each such set is mutually exclusive, and the sets exhaust the entire basis. Then, the full basis is given as
 	\begin{align}
@@ -95,7 +95,7 @@
 	We can employ the method of recursive Green's functions to calculate the density of states of this system.
 	
 	Instead of inverting the whole matrix, we now invert a number of smaller matrices.
-	Let $ d_p $ be the dimension of a $ \mathcal{B}_p $. Then, the cost of inversion is $ \order{\sum_{p=0}^{N} d^{3}_p} $. If we consider $ d = \max_p \left( d_p \right)  $, then, approximately, the inversion cost is $ \sim \order{N d^3} $, which scales linearly with $ N $, as opposed to with $ N^3 $. Another advantage of this method is that each $ g_p $ being independent, they can be calculated in parallel and stored, and then, later, can be called serially for connecting with its neighbors. Then, the time cost of obtaining the isolated Green's function is limited by the largest one. However, There are some significant numerical hurdles in this method.
+	Let $ d_p $ be the dimension of a $ \mathcal{B}_p $. Then, the cost of inversion is $ \order{\sum_{p=0}^{N} d^{3}_p} $. If we consider $ d = \max_p \left( d_p \right)  $, then, approximately, the inversion cost is $ \sim \order{N d^3} $, which scales linearly with $ N $, as opposed to with $ N^3 $. Another advantage of this method is that each $ g_p $ being independent, they can be calculated in parallel and stored, and then, later, can be called serially for connecting with its neighbors. Then, the time cost of obtaining the isolated Green's function is limited by the largest one. However, There are some numerical hurdles in this method.
 	\begin{enumerate}
 		\item As $ N $ becomes larger, the size of each $ B_p $ will increase, making calculation of even a single $ g_p $ very costly.
 		\item As the basis has no inherent ordering, we are forced to explicitly calculate the matrix elements of the isolated Green's functions and the connecting matrices. This becomes very time consuming as each $ \mathcal{B}_p $ becomes larger.

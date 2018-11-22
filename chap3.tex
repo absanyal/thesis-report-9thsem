@@ -6,7 +6,7 @@
 %\baselineskip 20pt
 
 \section{Simplifying the recursion formula}
-	The recursion formula shown in section  \ref{sec:generalized-manybody} involves connecting a large number of isolated Green's functions, each of which need to be calculated individually, as well as the connecting matrices, each of which needs to be calculated individually. Also, after calculating the isolated Green's functions, the left- and right-connected Green's functions must be calculated serially, as each result depends on the result before it.
+	The recursion formula shown in section  \ref{sec:generalized-manybody} involves connecting a large number of isolated Green's functions, each of which need to be calculated individually, as well as the connecting matrices, each of which also must be calculated individually. Also, after calculating the isolated Green's functions, the left- and right-connected Green's functions must be calculated serially, as each result depends on the result before it.
 	
 	However, if the problem consists of only two sites, the right connected Green's function of the left site is its fully connected Green's function, and similarly, for the right site, it is the left one.
 	
@@ -47,16 +47,20 @@
 	
 	Multiplying the the two matrices on the left hand side and comparing term-by-term, we get
 	\begin{align}
+		\label{eqn:fg11}
 		G^{c}_{11} &= \left[ g^{-1}_{1} - U_{12}\,g_2\,U_{21}  \right]^{-1}\\
+		\label{eqn:fg22}
 		G^{c}_{22} &= \left[ g^{-1}_{2} - U_{21}\,g_1\,U_{12}  \right]^{-1}\\
+		\label{eqn:fg12}
 		G^{c}_{12} &= G^{c}_{11}\,U_{12}\,g_2\\
+		\label{eqn:fg21}
 		G^{c}_{21} &= G^{c}_{22}\,U_{21}\,g_1
 	\end{align}
 
 \section{Algorithmically organizing the basis}
-	We will now device an algorithm to organize the basis, such that we can easily identify isolated blocks. Moreover, the organization will allow us to observe symmetries in the Hamiltonian which will allow us to easily predict the structure of the isolated Hamiltonians and the connecting matrices, without resorting to long, explicit calculations.
+	We will now devise an algorithm to organize the basis, such that we can easily identify isolated blocks. Moreover, the organization will allow us to observe certain patterns in the Hamiltonian which will allow us to easily predict the structure of the isolated Hamiltonians and the connecting matrices, without resorting to long, explicit calculations.
 	
-	For the purpose of simplicity, this algorithm is currently only being developed for one-dimensional lattices with spin-less fermions. Given a lattice, there are $ N $ sites on it, with $ n $ particles. We note that there are, therefore, $ N-1 $ partitions that separate these sites. For the graphical notation, we use:
+	For the purpose of simplicity, this algorithm is presently only being demonstrated for one-dimensional lattices with spin-less fermions. Given a lattice, there are $ N $ sites on it, with $ n $ particles. We note that there are, therefore, $ N-1 $ partitions that separate these sites. For the graphical notation, we use:
 	\begin{itemize}
 		\item $ \e $ for an empty site.
 		\item $ \u $ for a site containing a spin-less fermion. For ease of typesetting, we use the symbol of a fermion with up spin, but the spin is of no significance in our discussion.
@@ -75,31 +79,32 @@
 		There are particles on both the sites. We call this configuration $ d $.
 	\end{enumerate}
 	
-	A set of states can now be classified by choosing a particular partition, indexed by $ S $, and specifying occupation status (a, b, c or d) on the two sites on either side of it, along with specifying the number of particles on all the sites to the left of the partition, denoted by $ n_S $. The configuration on the right of the partition is not known, but is the \textbf{same} for all the states in this group. A set of such states is labeled as $ \ket{S, k, n_s} $ where $ k \in \{a, b, c, d\} $.
+	A set of states can now be classified by choosing a particular partition, indexed by $ S $, and specifying occupation status ($ a $, $ b $, $ c $ or $ d $) on the two sites on either side of it, along with specifying the number of particles on all the sites to the left of the partition, denoted by $ n_S $. The configuration on the right of the partition is not known, but is the \textbf{same} for all the states in this group. A set of such states is labeled as $ \ket{S, k, n_s} $ where $ k \in \{a, b, c, d\} $.
 	
 	For example, consider the set $ \ket{5,c,2} $. Using the conventions given above, this set has the following properties:
 	\begin{enumerate}
 		\item There are 5 sites to the left of the partition, so a total of six sites.
 		\item The last two sites are in configuration $ c $, so, they are fixed as $ \u \p \u $.
 		\item As $ n_S = 2 $, there should be $ 2 $ particles to the left of the partition. One of these is fixed because of the configuration $ c $. This leaves one more particle to be placed in $ 4 $ sites, which can be done in $ 4 $ different ways.
-		\item Combining all this information we get the set as
-		\begin{align*}
-			\ket{5,c,2} =
-			\begin{cases}
-				\u \e \e \e \,\u \p\, \e \\
-				\e \u \e \e \u \p \e \\
-				\e \e \u \e \u \p \e \\
-				\e \e \e \u\,\,\,\u \p \e \\
-			\end{cases}
-		\end{align*}
-	\end{enumerate}
-	Therefore, we note that if we do not allow hopping across the $ 5 $th boundary, states inside $ \ket{5, c, 2} $ do not map to outside. This allows us to set up our isolated Green's functions in terms of these blocks.
+\end{enumerate}	
+	Combining all this information we get the set as
+	\begin{align*}
+		\ket{5,c,2} =
+		\begin{cases}
+			\u \e \e \e \,\u \p\, \e \\
+			\e \u \e \e \u \p \e \\
+			\e \e \u \e \u \p \e \\
+			\e \e \e \u\,\,\,\u \p \e \\
+		\end{cases}
+	\end{align*}
 	
-	Now, in all states in the $ \ket{5, c, 2} $ block, the right-most site (site number six) is set to $ \e $. So, inside this block, me can now move to partition number $ 4 $, that is, the partition across the fourth and fifth sites. We see that across the $ 4 $th boundary, we have two possibilities. Three of them have the states have a configuration $ \e \p \u $, which, according to our convention, are labeled as $ \ket{4, b, 1} $, and one of them has the configuration $ \u \p\, \u $, which corresponds to a singleton set, $ \ket{4, d, 1} $.
+	Therefore, we note that if we do not allow hopping across the $ 5 $th boundary, states inside $ \ket{5, c, 2} $ do not map to outside that block. This allows us to set up our isolated Green's functions in terms of these blocks.
+	
+	Now, in all states in the $ \ket{5, c, 2} $ block, the right-most site (site number six) is set to $ \e $. So, inside this block, we can now move to partition number $ 4 $, that is, the partition across the fourth and fifth sites. We see that across the $ 4 $th boundary, we have two possibilities. Three of them have the states have a configuration $ \e \p \u $, which, according to our convention, are labeled as $ \ket{4, b, 1} $, and one of them has the configuration $ \u \p\, \u $, which corresponds to a singleton set, $ \ket{4, d, 1} $.
 	
 	We can continue this process till we reach $ S = 1 $, which uniquely identifies each state in the basis. Also, we can utilize this organization to procedurally generate the basis. In order to do that, we need to know how a block can be subdivided. 
 	
-	Given a state $ \ket{S, \alpha_S, \beta_S, n_S} $, we can also tell the size of the block, that is, the number of actual states that will lie in the basis.
+	Given a state $ \ket{S, \alpha_S, \beta_S, n_S} $, we can also tell the size of the block, that is, the number of actual states that will lie in the block.
 	\begin{table}[h!]
 		\centering
 		\begin{tabular}{cc}
@@ -172,7 +177,7 @@
 	\end{enumerate}
 	If any of these (except the first one) is true, it leads to a violation of particle number conservation within that  block and hence, that block is discarded. The first condition being true simply corresponds to a physically impossible state.
 	
-	Now, we introduce a convention. Within each block, the sub-blocks must always be arranged in the order $ a, c, b, d $, whichever may be present inside the given block. Using this ordering introduces some symmetries into the basis, which we exploit to efficiently calculate the Green's functions of each block.
+	Now, we introduce a convention. Within each block, the sub-blocks must always be arranged in the order $ a, c, b, d $, whichever may be present inside the given block. Using this ordering introduces some structure into the basis, which we exploit to efficiently calculate the Green's functions of each block.
 	
 	Using all the above information, we will show we can form the basis efficiently, without having to explicitly calculate the configuration of each individual state. Suppose the system has $ N $ sites with $ n $ spin-less fermions. We define the following:
 	\begin{align*}
@@ -196,11 +201,43 @@
 		n_{S_{\mathrm{max}}} &= 2
 	\end{align*}
 	We start with the following initial states:
-	
 	\begin{align*}
 		&\ket{3, \,a\,, 2}\\
 		&\ket{3, \,c\,, 2}\\
 		&\ket{3, \,b\,, 1}\\
 		&\ket{3, \,d\,, 1}
 	\end{align*}
+	Now, iteratively, we continue subdividing the states to obtain the following structure:
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.5\linewidth]{4s2p_structure.pdf}
+		\caption{The complete subdivision of states of the 4 site 2 particles lattice. The numbers in the parentheses in $ S=3 $ corresponds to the size of the block. All blocks of $ S \le 2 $ have size of $ 1 $, so the label has been omitted.}
+		\label{fig:4s2p_structure}
+	\end{figure}
+
+\section{Generating the Green's functions of the blocks}
+	We consider a tight-binding Hamiltonian with nearest neighbor interactions.
+	\begin{align}\label{eqn:spinlessH}
+		\ham = -t \sum_{i = 1}^{N-1} \left[ \hat{c}^{\dagger}_{i} \hat{c}^{}_{i+1} + \hat{c}^{\dagger}_{i+1} \hat{c}^{}_{i}\right] + U^{NN}\sum_{i=1}^{N-1} \hat{n}_i \hat{n}_{i+1}
+	\end{align}
 	
+	Consider a block of states at a level $ S+1 $, labeled $ \ket{\psi} $, which can be subdivided into two blocks, $ \ket{\psi_1} $ and $ \ket{\psi_2} $, at level $ S $. Suppose, we know the Green's functions of the blocks $ \ket{\psi_1} $ and $ \ket{\psi_2} $ are $ g_1 $ and $ g_2 $, respectively. Then, if the connecting matrices, $ U_{\psi_1, \psi_2} $ and $ U_{\psi_2, \psi_1} $ are known, then, we can use equations \eqref{eqn:fg11} to \eqref{eqn:fg21} to calculate the four block-matrix elements of the Green's function of the $ \ket{\psi} $ block.
+	
+	We define two level-$ S $ states, $ \ket{\psi_1} $ and$  \ket{\psi_2} $, to be connected at the $ S $th level, if, a single particle hopping across the $ S $th boundary takes state $ \ket{\psi_1} $ to $ \ket{\psi_2} $, and vice versa. At the level $ S = 1 $, the possible states are the configurations $ a, c, b, d $. Now, $ c =\, \u \p\ 0 $ and $ b = \e \p \u $; hence, a single particle hopping connects $ c $ and $ b $. No particle hopping across the $ (S = 1) $th boundary is possible in $ a $ and $ d $.
+	
+	As $ c $ goes to $ b $ at the $ S $th level, the site on the right is different. As a result, two connected states must be adjacent in the list of states at level $ S $, but at level $ (S+1) $, they must lie in different blocks. However, since two connected states can only differ across one boundary, they must be identical across all other sites. So, for two states to be connected at the $ S $th level,
+	\begin{enumerate}
+		\item Both the block-states must be of level $ S $.
+		\item The states must be $ c $ and $ b $, in this order. We can calculate the sizes of two such blocks and show that they must be equal. 
+		\item The states must lie in different blocks at at the $ (S+1) $th level.
+		\item The states must lie in the same block as $ (S+2) $th level.
+		\item As all sites below the $ (S-1) $th boundary must be identical, and the states are always arranged in a fixed order of $ a, c, b, d $, the set of blocks below $ (S-1) $ must be exactly identical, and hence, the matrix element of the Hamiltonian for these identical blocks must be identity. Hence, the matrix connecting $ c $ and $ b $ is an identity matrix connecting, dimension of which is that of $ c $ or $ d $ (which are equal in size).
+	\end{enumerate}
+	
+	After knowing all the connecting matrices, we can proceed to calculate the Green's functions, starting at level $ S=1 $. At this level, all the blocks are single states. The Green's function for the $ i $th state is given as
+	\begin{align}\label{eqn:gf-s1}
+		g_i\left(\omega\right) = \left[ \left( \omega + \I \eta\right) - \nu_i U^{NN} \right]^{-1}
+	\end{align}
+	where $ \nu_i $ is the number of $ \u \p \u $ pairs in the state. This allows us to calculate the isolated Green's functions of all the blocks at level $ 1 $. Now, we refer to the list at $ S = 2 $ and see how the level $ 1 $ blocks are grouped. We connect them recursively using equations \eqref{eqn:fg11} to \eqref{eqn:fg21}, after finding the appropriate connecting matrices. We continue this process upwards till all the blocks have been connected up level $ S_{\mathrm{max}} $. The four blocks at this level are connected in groups of two ($ a $ with $ c $, $ b $ with $ d $), and the resulting two blocks are connected to obtain the Green's function of the whole system.
+	
+	Following this algorithm, we have converted a large matrix inversion into many independent smaller matrix inversions. This reduces the cost from $ \order{N^3} $ to $ \order{N} $, which is a significant reduction in large systems. Also, as the inversions are all independent, the method can be trivially parallelized. Finally, organizing the basis allowed us to completely bypass the steps of constructing the matrix. This allows us to scale up the method and apply it to much larger systems.
