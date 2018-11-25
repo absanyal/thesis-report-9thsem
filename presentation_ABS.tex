@@ -10,7 +10,7 @@
 % modify this file as you see fit and even to delete this copyright
 % notice. 
 
-\documentclass{beamer}
+\documentclass[usenames,dvipsnames]{beamer}
 
 \usepackage[english]{babel}
 \usepackage{physics}
@@ -21,6 +21,8 @@
 \usepackage{subfigure}
 \usepackage{caption}
 \usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
 
 % There are many different themes available for Beamer. A comprehensive
 % list with examples is given here:
@@ -103,12 +105,12 @@
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
-\AtBeginSection[]
-{
-  \begin{frame}<beamer>{Outline}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
+%\AtBeginSection[]
+%{
+%  \begin{frame}<beamer>{Outline}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
 
 % Let's get started
 \begin{document}
@@ -123,6 +125,10 @@
 \end{frame}
 
 \section{Green's Function}
+\begin{frame}
+	\centering
+	{\Huge Green's functions}
+\end{frame}
 \subsection{Definition}
 \begin{frame}{Definition}
 	\begin{itemize}
@@ -136,7 +142,7 @@
 			\end{align}
 			}
 		\item{
-			For a non-interacting Hamiltonian, the Green's function operator is diagonal. In general, there are non-zero off-diagonal elements.
+			For an interacting Hamiltonian, the Green's function operator is, in general, non-diagonal.
 		}
 	\end{itemize}
 \end{frame}
@@ -159,38 +165,38 @@
 \end{frame}
 
 \subsection{Calculation of physical observables}
-	\begin{frame}{Calculation of physical observables}
-		\begin{itemize}
-		\item {
-			Given a many body system, we can construct a many body basis consisting of the possible configurations of the system.
-			\begin{align}
-			\mathcal{B} = \{ \ket{\psi_1}, \ket{\psi_2}, \dots, \ket{\psi_{\mathcal{N}}} \}
-			\end{align} 
-			}
-		\item {\pause
-			The matrix corresponding to the Hamiltonian can be calculated element-wise.
-			\begin{align}
-				\mathcal{H}_{i,\,j} = \mel{\psi_i}{\ham}{\psi_j}
-			\end{align}
-			}
-		\item {\pause
-			The matrix elements of the Green's function are then given as
-			 \begin{align}
-			 \mel{\psi_i}{\hat{G}}{\psi_j} = \mel{\psi_i}{\left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}}{\psi_j}
-			 \end{align}
-			}
-	\end{itemize}
-	\end{frame}
+%	\begin{frame}{Calculation of physical observables}
+%		\begin{itemize}
+%		\item {
+%			Given a many body system, we can construct a many body basis consisting of the possible configurations of the system.
+%			\begin{align}
+%			\mathcal{B} = \{ \ket{\psi_1}, \ket{\psi_2}, \dots, \ket{\psi_{\mathcal{N}}} \}
+%			\end{align} 
+%			}
+%		\item {\pause
+%			The matrix corresponding to the Hamiltonian can be calculated element-wise.
+%			\begin{align}
+%				\mathcal{H}_{i,\,j} = \mel{\psi_i}{\ham}{\psi_j}
+%			\end{align}
+%			}
+%		\item {\pause
+%			The matrix elements of the Green's function are then given as
+%			 \begin{align}
+%			 \mel{\psi_i}{\hat{G}}{\psi_j} = \mel{\psi_i}{\left[ \left( \omega + \I \eta\right) \mathbb{I} - \ham \right]^{-1}}{\psi_j}
+%			 \end{align}
+%			}
+%	\end{itemize}
+%	\end{frame}
 	
 	\begin{frame}{Calculation of physical observables}
 		\begin{itemize}
 			\item {
-				We now define the local spectral weight function as
+				Given a basis $ \mathcal{B} $ and a Hamiltonian $ \ham $, we now define the local spectral weight function as
 				\begin{align}
 				A_{i} \left( \omega \right) = -\frac{1}{\pi} \Im{ {\mel{\psi_i}{\hat{G}}{\psi_i}} }
 				\end{align}
 				}
-			\item {\pause
+			\item {
 				Following this, we now define the density of states as
 				\begin{align}\label{eqn:dossum}
 				\nonumber\rho \left( \omega \right) &= \frac{1}{\mathcal{N}} \sum_{i = 1}^{\mathcal{N}} A_{i} \left( \omega \right)\\
@@ -209,7 +215,7 @@
 				As an example, we consider a 1D crystal with $ N $ sites with $ \tfrac{N}{2} $ spin $ +\tfrac{1}{2} $ fermions and $ \tfrac{N}{2} $ spin $ -\tfrac{1}{2} $ fermions.
 				}
 			\item {
-				The system evolves with the tight-binding Hamiltonian with on-site particle-particle interaction.
+				The system evolves with the tight-binding Hamiltonian with on-site particle-particle interaction and hard-wall boundary conditions.
 			\begin{align}\label{eqn:tight-binding-hamil}
 			\ham = -t \left(\sum_{\sigma = \uparrow, \downarrow} \sum_{i=1}^{N-1} \hat{c}^{\dagger}_{i, \sigma} \hat{c}^{}_{i + 1, \sigma} + \mathrm{h.c.} \right) + U \sum_{i=1}^{N}\hat{n}_{i,\uparrow} \hat{n}_{i,\downarrow}
 			\end{align} }
@@ -219,9 +225,9 @@
 	\begin{frame}{Calculation of physical observables}
 		\begin{figure}[h!]
 			\centering
-			\includegraphics[width=0.7\linewidth]{6_6_0_4.pdf}
-			\caption{DoS for the 6 site, 6 particle half-filled Hubbard model, obtained by direct inversion, with $ U=4 $.}
-			\label{fig:6_6_0_4}
+			\includegraphics[width=0.7\linewidth]{6_6_0_8_an.pdf}
+			\caption{DoS for the 6 site, 6 particle half-filled Hubbard model, obtained by direct inversion, with $ U=8 $. Each colored block denotes a set of states with different number of double occupancies: {\color{Orange}0}, {\color{RoyalPurple}1}, {\color{Cyan}2}, {\color{Green}3}.}
+			\label{fig:6_6_0_8}
 		\end{figure}
 	\end{frame}
 
@@ -235,7 +241,7 @@
 				\frac{\left( N! \right)^{2} }{\left( \tfrac{N}{2}! \right)^{4}}
 				\end{align}
 			}
-		\item {\pause
+		\item {
 			This number increases exponentially with $ N $.
 			}
 		\begin{figure}[h!]
@@ -250,37 +256,400 @@
 \begin{frame}{Problems arising for large values of $ N $}
 	\begin{itemize}
 		\item Takes long time to calculate all configurations of the basis and all matrix elements.
-		\item Difficult to store large $ N \cross N $ matrix in computer memory prior to inversion.
-		\item Matrix inversion is an order $ \order{N^3} $ process, which becomes costlier in larger systems.
+		\item Difficult to store large $ d \cross d $ matrix in computer memory prior to inversion.
+		\item Matrix inversion is an order $ \order{d^3} $ process, which becomes difficult to compute in larger systems.
 	\end{itemize}
 \end{frame}
 
 \section{Recursive Green's functions}
+\begin{frame}
+	\centering
+	{\Huge Recursive Green's functions}
+\end{frame}
 \subsection{One body recursive Green's functions}
 	\begin{frame}{Idea behind recursive Green's functions}
 		\begin{itemize}
 			\item{
 			Consider a one dimensional lattice with $ N $ sites.
 			}
-			\item {\pause
+			\item {
 				We calculate the isolated Green's function of each site, which is the Green's function of a site in absence of hopping.
 				\begin{align}
 				g_{i} \left( \omega \right) = \left[ \omega + \I \eta - \epsilon_i \right]^{-1}
 				\end{align}
 				}
-			\item{\pause
+			\item{
 				We show that there exists a recursive relation for the full Green's function of each site, in terms of the isolated Green's function and the hopping constants between the sites.
 				}
 		\end{itemize}
 	\end{frame}
 
 \begin{frame}{Connecting isolated Green's functions}
-	
+	\begin{itemize}
+		\item {In order to connect the sites, we use the two equivalent form of Dyson's equations\,\cite{2013arXiv1304.3934L}:
+			\begin{align}
+			G = G^{(0)} + G^{(0)}VG\label{eqn:dysonleft}\\
+			G = G^{(0)} + GVG^{(0)}\label{eqn:dysonright}
+			\end{align}}
+		\item {
+			By appropriately choosing values of $ G^{0} $ and $ V $ and calculating the matrix elements of $ G $, we can connect the isolated Green's functions.
+			}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Left-connected Green's functions}
+	\begin{itemize}
+		\item {For the left-connected Green's function, we choose
+			\begin{align}
+			G^{0} &= G^{L}_{i-1}\ketbra{i-1}{i-1} + g_2 \ketbra{i}{i}\\
+			V &= U_{i-1,\,i}\ketbra{i-1}{i} + U_{i,\,i-1}\ketbra{i}{i-1}
+			\end{align}}
+		\item {
+			The boundary condition is
+			\begin{align}
+			G^{L}_{1} = g_{1}
+			\end{align}
+			}
+			\item {
+				This gives
+				\begin{align}
+				G^{L}_{i,i} = \left[ g^{-1}_i - U_{i,i-1}\,g_{i-1}\,U_{i-1,i}  \right]^{-1}
+				\end{align}
+			}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Right-connected Green's functions}
+	\begin{itemize}
+		\item {For the left-connected Green's function, we choose
+			\begin{align}
+			G^{0} &= G^{R}_{i+1}\ketbra{i+1}{i+1} + g_2 \ketbra{i}{i}\\
+			V &= U_{i+1,\,i}\ketbra{i+1}{i} + U_{i,\,i+1}\ketbra{i}{i+1}
+			\end{align}}
+		\item {
+			The boundary condition is
+			\begin{align}
+			G^{R}_{N} = g_{N}
+			\end{align}
+		}
+		\item {
+			This gives
+			\begin{align}
+			G^{R}_{i,i} = \left[ g^{-1}_i - U_{i,i+1}\,g_{i+1}\,U_{i+1,i}  \right]^{-1}
+			\end{align}
+		}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Fully connected Green's functions}
+	\begin{itemize}
+		\item {Finally, in order to connect any site to its two nearest neighbors, we choose
+		\begin{align}
+		G^{0} =&\,g_{i}\ketbra{i}{i} + G^{L}_{i-1}\ketbra{i-1}{i-1} + G^{R}_{i+1}\ketbra{i+1}{i+1}\\
+		\nonumber V =&\,U_{i-i,i}\ketbra{i-1}{i} + U_{i,i-1}\ketbra{i}{i-1} \\&+ U_{i+i,i}\ketbra{i+1}{i} + U_{i,i+1}\ketbra{i}{i+1}
+		\end{align}}
+		\item {This gives us the fully connected Green's function of any site as
+		\begin{align}
+		\nonumber G^{c}_{i,i} &= \left[ g^{-1}_{i} - U_{i,i-1} G^{L}_{i-1, i-1} U_{i-1,i} - U_{i,i+1} G^{R}_{i+1,i+1} U_{i+1,i} \right]\\
+		&= \left[ \omega + \I \eta -\epsilon_i - U_{i,i-1} G^{L}_{i-1, i-1} U_{i-1,i} - U_{i,i+1} G^{R}_{i+1,i+1} U_{i+1,i} \right]
+		\end{align}}
+	\end{itemize}
+\end{frame}
+
+\subsection{Generalization to many-body systems}
+\begin{frame}{Generalization to many-body systems}
+	\begin{itemize}
+		\item {
+		It is not trivial to identify isolated Green's functions fo many-body systems.
+		}
+	\item {
+		We divide the system into two halves. We group the states on the basis of the number of particles on the left of the system. Denote each group as $ \mathcal{B}_p $. 
+		}
+	\item{
+		\begin{align}
+		\mathcal{B} = \bigcup_{p = 0}^{N} \mathcal{B}_p
+		\end{align}
+		}
+	\item {
+		When no particle hops across the central boundary, each $ \mathcal{B}_p $ becomes an isolated site.
+		}
+	\end{itemize}
+\end{frame}
+
+	\begin{frame}
+		{Generalization to many-body systems}
+	\begin{itemize}
+		\item {
+			Under the action of $ \ham $, each $ \mathcal{B}_p $ connects to only $ \mathcal{B}_{p \pm 1} $.
+			}
+		\item{
+			This makes the Hamiltonian tridiagonal and maps it exactly to the one-body problem.
+			}
+		\item {
+			However, as the basis has no inherent ordering, we are forced to explicitly calculate the matrix elements of the isolated Green's functions and the connecting matrices. This becomes very time consuming as each $ \mathcal{B}_p $ becomes larger.
+			}
+	\end{itemize}
+	\end{frame}
+
+\section{Algorithm for generating the many-body Green's functions}
+\begin{frame}
+	\centering
+	{\Huge Algorithm for generating the many-body Green's functions}
+\end{frame}
+\subsection{Arranging the basis}
+\begin{frame}{The system}
+	\begin{itemize}
+		\item {
+			The algorithm is being demonstrated for a lattice with spin-less fermions and nearest neighbor interactions.
+			\begin{center}
+				\includegraphics[width=0.5\linewidth]{image/system_spinless}
+			\end{center}
+
+			}
+		\item {The Hamiltonian for the system is
+			\begin{align}\label{eqn:spinlessH}
+			\ham = -t \sum_{i = 1}^{N-1} \left[ \hat{c}^{\dagger}_{i} \hat{c}^{}_{i+1} + \hat{c}^{\dagger}_{i+1} \hat{c}^{}_{i}\right] + U^{NN}\sum_{i=1}^{N-1} \hat{n}_i \hat{n}_{i+1}
+			\end{align}
+			}
+	\end{itemize}
+\end{frame}
+\begin{frame}{Partitioning the basis}
+	\begin{itemize}
+		\item {
+			A system of $ N $ sites has $ N-1 $ partitions between the sites.
+			}
+		\item {
+			Now, we consider any such partition; there are two sites on either side of it, with the following possibilities:
+			\begin{itemize}
+				\item $ a $ : $ \e \p \e $\\ 
+				\item $ b $ : $ \e \p \u $\\
+				\item $ c $ : $ \u \p \e $\\
+				\item $ d $ : $ \u \p \u $\\
+			\end{itemize}
+			}
+		\item {
+			Any set of states can be denoted as $ \ket{S, k, n_s} $.
+			}
+		\item {
+			For example,
+			\begin{align*}
+			\ket{5,c,2} =
+			\begin{cases}
+			\u \e \e \e \,\u \p\, \e \\
+			\e \u \e \e \u \p \e \\
+			\e \e \u \e \u \p \e \\
+			\e \e \e \u\,\,\,\u \p \e \\
+			\end{cases}
+			\end{align*}
+			}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Subdividing the states}
+	\begin{itemize}
+		\item {
+			Every set of states can be further subdivided.
+			\begin{table}[h!]
+				\centering
+				\begin{tabular}{cc}
+					\toprule
+					$ k $ at $ S $th level & Possible values of $ k $ at $ (S-1) $th level\\
+					\midrule
+					$ a $ & $ a $, $ c $\\
+					$ b $ & $ c $, $ d $\\
+					$ c $ & $ b $, $ d $\\
+					$ d $ & $ b $, $ d $\\
+					\bottomrule
+				\end{tabular}
+			\end{table}
+			}
+		\item {
+			We continue subdividing till $ S = 1 $ while maintaining particle number conservation.
+			}
+		\item Always arrange in order $ a, c, b, d $.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Example of basis generation}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.6\linewidth]{4s2p_structure_exp.pdf}
+		\caption{The complete subdivision of states of the 4 site 2 particles lattice. The numbers in the parentheses in $ S=3 $ corresponds to the size of the block. All blocks of $ S \le 2 $ have size of $ 1 $, so the label has been omitted.}
+		\label{fig:4s2p_structure}
+	\end{figure}
+\end{frame}
+
+\subsection{Generating the Green's functions of the blocks}
+\begin{frame}{Generating the Green's functions of the blocks}
+	\begin{itemize}
+		\item {
+			Any two sub-blocks are connected at the $ S $th level if they are blocks of type $ c $ and $ b $.
+			}
+		\item {
+			The connecting matrix is always an identity matrix.
+			}
+		\item {
+			At $ S = 1 $, the isolated Green's functions are
+			\begin{align}\label{eqn:gf-s1}
+			g_i\left(\omega\right) = \left[ \left( \omega + \I \eta\right) - \nu_i U^{NN} \right]^{-1}
+			\end{align}
+			}
+		\item {
+			We generate the connecting matrices between the states at $ S = 1 $ and connect them to find all $ G^{c}_i $. 
+			}
+		\item {
+			We continue this process upwards till all blocks have been connected.
+			}
+	\end{itemize}
+\end{frame}
+
+\section{Results}
+\begin{frame}
+	\centering
+	{\Huge Results}
+\end{frame}
+
+\begin{frame}{6 sites with 2 particles without interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s2p_U_0.pdf}
+		\caption{DoS for 2 particles on 6 sites with $ U^{NN} = 0 $.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{6 sites with 2 particles with interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s2p_U_8_new.pdf}
+		\caption{DoS for 2 particles on 6 sites with $ U^{NN} = 8 $.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{6 sites with 3 particles with interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s3p_U_8_new.pdf}
+		\caption{DoS for 3 particles on 6 sites with $ U^{NN} = 8 $.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{6 sites with 4 particles with interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s4p_U_8_new.pdf}
+		\caption{DoS for 4 particles on 6 sites with $ U^{NN} = 8 $.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Evolution of the DoS with increasing filling}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\linewidth]{image/evolution}
+		\caption{A comparison between the DoS of the 6 site problem at different levels of filling, for $ U^{NN} = 8 $, to show how the bands shift as interactions increase with increasing number of particles.}
+		\label{fig:evolution}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Summary}
+	\begin{itemize}
+		\item We have converted a large matrix inversion into many independent smaller matrix inversions. This reduces the cost from $ \order{N^3} $ to $ \order{N} $, which is a significant reduction in large systems.
+		\item As the inversions are all independent, the method can be trivially parallelized.
+		\item Organizing the basis allowed us to completely bypass the steps of constructing the matrix. This allows us to scale up the method and apply it to much larger systems.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Outlooks}
+	\begin{itemize}
+		\item Optimization of the code to allow us to efficiently calculate larger systems at lower time and memory cost.
+		
+		\item Extending the model to two dimensions.
+		
+		\item Extending the model for fermions with spins.
+		
+		\item Addition of approximations which allow us to calculate the approximate spectrum of large systems, by discarding high-energy excitations.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{References}
-	\bibliographystyle{plain}
+	\bibliographystyle{unsrt}
 	\bibliography{reflist.bib}
+\end{frame}
+
+\section*{Appendix}
+\begin{frame}
+	\centering
+	{\Huge Appendix}
+\end{frame}
+\begin{frame}{Off-diagonal connected Green's functions}
+	It is also possible to find the off-diagonal elements using the relations:
+	\begin{align}\label{eqn:connecting-eqn-onebody}
+	G^{c}_{i-1,i} = G^{L}_{i-1,i-1} U_{i-1,i} G^{c}_{i,i}\\
+	G^{c}_{i+1,i} = G^{R}_{i+1,i+1} U_{i+1,i} G^{c}_{i,i}\\
+	G^{c}_{i,i+1} = G^{c}_{i,i} U_{i,i+1} G^{R}_{i+1,i+1}
+	\end{align}
+\end{frame}
+\begin{frame}{Two-site recursion formulae}
+	Suppose, we divide the system into two 'sites' in the Fock space. The full Hamiltonian is given as
+	\begin{align}
+	\ham =
+	\begin{bmatrix}
+	H_1 	& 	U_{12} \\
+	U_{12} 	& 	H_2
+	\end{bmatrix}
+	\end{align}
+	where each element is a block matrix. In similar block matrix form, the Green's function's elements can be written as (after direct inversion)
+	\begin{align}
+	G =
+	\begin{bmatrix}
+	{G}^{c}_{11} 	& 	{G}^{c}_{12} \\
+	{G}^{c}_{12} 	& 	{G}^{c}_{22}
+	\end{bmatrix}
+	\end{align}
+	As the result is obtained after direct inversion, all matrix elements are fully connected.
+\end{frame}
+\begin{frame}
+		Combining this with \eqref{eqn:gf-def}, after rearranging, we can write
+		\begin{align}
+		\begin{bmatrix}
+		{G}^{c}_{11} 	& 	{G}^{c}_{12} \\
+		{G}^{c}_{12} 	& 	{G}^{c}_{22}
+		\end{bmatrix}
+		\begin{bmatrix}
+		g^{-1}_{1} 	& 	-U_{12} \\
+		-U_{12} 	& 	g^{-1}_{2}
+		\end{bmatrix} = 
+		\begin{bmatrix}
+		1 & 0\\
+		0 & 1
+		\end{bmatrix}
+		\end{align}
+		where $ g^{-1}_{i} = \omega +\I \eta - H_i $. $ 1 $ represents a block identity matrix, and $ 0 $ is a block null matrix.
+		
+		Multiplying the the two matrices on the left hand side and comparing term-by-term, we get
+		\begin{align}
+		\label{eqn:fg11}
+		G^{c}_{11} &= \left[ g^{-1}_{1} - U_{12}\,g_2\,U_{21}  \right]^{-1}\\
+		\label{eqn:fg22}
+		G^{c}_{22} &= \left[ g^{-1}_{2} - U_{21}\,g_1\,U_{12}  \right]^{-1}\\
+		\label{eqn:fg12}
+		G^{c}_{12} &= G^{c}_{11}\,U_{12}\,g_2\\
+		\label{eqn:fg21}
+		G^{c}_{21} &= G^{c}_{22}\,U_{21}\,g_1
+		\end{align}
+\end{frame}
+\begin{frame}{6 sites with 3 particles without interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s3p_U_0.pdf}
+		\caption{DoS for 3 particles on 6 sites with $ U^{NN} = 0 $.}
+	\end{figure}
+\end{frame}
+\begin{frame}{6 sites with 4 particles without interaction}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.8\linewidth]{6s4p_U_0.pdf}
+		\caption{DoS for 4 particles on 6 sites with $ U^{NN} = 0 $.}
+	\end{figure}
 \end{frame}
 \end{document}
 
